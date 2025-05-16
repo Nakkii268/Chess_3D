@@ -12,6 +12,7 @@ public class InGameUIManager : MonoBehaviour
     public PauseUI pauseUI;
     public GameEndUI gameEndUI;
     public SettingUI settingUI;
+    public PlayerTurnNotify notify;
     [SerializeField] private Button SettingBtn;
     [SerializeField] private Button PauseBtn;
     public event EventHandler OnPauseBtnCick;

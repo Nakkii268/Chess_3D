@@ -86,7 +86,7 @@ public class ChessBoard : Singleton<ChessBoard>
                 currentHover = hitPos;
 
                 tiles[hitPos.x, hitPos.y, hitPos.z].layer = LayerMask.NameToLayer("Hover");//
-                Debug.Log("oke");
+               
             }
             //already hovering a tile before
             if (currentHover != hitPos)
@@ -522,7 +522,7 @@ public class ChessBoard : Singleton<ChessBoard>
         chessPieces[source.x, source.y, source.z] = null;
         PositionPiece(destination.x, destination.y, destination.z);
         isWhiteTurn = true;
-
+        InGameUIManager.Instance.notify.gameObject.SetActive(true);
 
     }
     public Vector3Int GetBoardSize()

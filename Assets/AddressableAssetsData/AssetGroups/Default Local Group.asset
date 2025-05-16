@@ -16,27 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 6c24b86c01e984046a829a7066679fc9
-  m_SerializeEntries:
-  - m_GUID: 1eb3b7738fb314f478686d9486f4970f
-    m_Address: Assets/MapPrefab/Lv3/Chess.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 20d2ac4d5b3929f4eab647910aaefe18
-    m_Address: Assets/MapPrefab/Lv2/Chess.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4668ebe33d33e0544bf569f30c223b8b
-    m_Address: Assets/MapPrefab/Lv1/Chess.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9fc0d4010bbf28b4594072e72b8655ab
-    m_Address: Assets/Scenes/GameScene.unity
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: b529c02444651a94da2fd975afc24847, type: 2}
   m_SchemaSet:
