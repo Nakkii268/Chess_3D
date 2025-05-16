@@ -1,30 +1,29 @@
-
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.ResourceManagement.ResourceProviders;
-public static class SceneController 
+
+public static class SceneController
 {
     public enum Scene
     {
         MenuScene,
         GameScene,
-        LoadingScene
     }
-   public static event SceneLoad OnSceneLoad;
+    public static event SceneLoad OnSceneLoad;
     public static Scene scene;
-    private static AsyncOperationHandle<SceneInstance> SceneLoadOpHandler;
+
     public static void LoadScene(Scene scene)
     {
         //SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().buildIndex);
-        
-        GameManager.Instance.nextSceneLoad = scene.ToString();
-        
-        SceneLoadOpHandler = Addressables.LoadSceneAsync("LoadingScene",activateOnLoad:true);
+        string targetSene = scene.ToString();
+        SceneManager.LoadScene(targetSene);
 
 
         SubscriptionEvent();
-        
+
     }
     public static void ReloadScene()
     {
@@ -39,7 +38,7 @@ public static class SceneController
     private static void SceneManager_sceneLoaded(UnityEngine.SceneManagement.Scene arg0, LoadSceneMode arg1)
     {
         OnSceneLoad?.Invoke();
-        
+
     }
     public static void UnsubscriptionEvent()
     {
@@ -58,9 +57,9 @@ public static class SceneController
     }
     public static int GetCurrentScene()
     {
-        
-      return  SceneManager.GetActiveScene().buildIndex;
+
+        return SceneManager.GetActiveScene().buildIndex;
     }
-   
+
 }
 public delegate void SceneLoad();

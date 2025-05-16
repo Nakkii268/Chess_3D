@@ -28,7 +28,8 @@ public class GameEndUI : UIElement
         {
             SceneController.ReloadScene();
         });
-        if(GameManager.Instance.GetCurrentMapIndex()+1 > GameManager.Instance.GetMapListCount()-1) {
+        if (GameManager.Instance.GetCurrentMapIndex() + 1 > GameManager.Instance.GetMapListCount() - 1)
+        {
             NextLvBtn.gameObject.SetActive(false);
 
         }
@@ -53,8 +54,8 @@ public class GameEndUI : UIElement
         gameObject.SetActive(true);
         WinText.gameObject.SetActive(false);
         LoseText.gameObject.SetActive(true);
-        NextLvBtn.gameObject.SetActive(false) ;
+        NextLvBtn.gameObject.SetActive(false);
     }
-  
+
 
 }

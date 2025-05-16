@@ -3,18 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class ChessBoard : Singleton<ChessBoard> 
+public class ChessBoard : Singleton<ChessBoard>
 {
 
-    
+
     [Header("MiniMax")]
     [SerializeField] private MiniMax minimax = new MiniMax();
     [SerializeField] private float tileSize = 1f;
     [SerializeField] private GameObject[] tileList;
-    
+    [SerializeField] private float levelScore = 0;
 
     [Header("Prefab & team meterial")]
     [field: SerializeField] private GameObject[] prefabs;
@@ -27,30 +25,27 @@ public class ChessBoard : Singleton<ChessBoard>
     [SerializeField] private ChessPiece currentSelected;
     [SerializeField] private List<Vector3Int> availableMoves = new List<Vector3Int>();
     [SerializeField] private List<ChessPieceData> pieceData = new List<ChessPieceData>();
-    
 
 
 
-  
-    private  int TILE_COUNT_X = 11;
-    private  int TILE_COUNT_Y = 11;
-    private  int TILE_COUNT_Z = 2;
-    [SerializeField]private float step = 0;
+
+
+    private int TILE_COUNT_X = 11;
+    private int TILE_COUNT_Y = 11;
+    private int TILE_COUNT_Z = 2;
+    [SerializeField] private float step = 0;
     [SerializeField] public GameObject[,,] tiles;
     private Camera currentCamera;
     private Vector3Int currentHover;
 
-    [SerializeField]private bool isWhiteTurn;
+    [SerializeField] private bool isWhiteTurn;
     public MapSO map;
     public event EventHandler<EndGameData> IsWinningGame;
     public event EventHandler<float> OnStepReduce;
 
-    private AsyncOperationHandle<GameObject> MapLoadOpHandler;
-    
 
-    private void Start() 
+    public override void Awake()
     {
-        
 
         tileList = GetChild(tileHolder.gameObject);
 
@@ -66,6 +61,7 @@ public class ChessBoard : Singleton<ChessBoard>
         TilesSetup(TILE_COUNT_X, TILE_COUNT_Z, TILE_COUNT_Y);//format when setup x,z,y
         pieceData = map.pieceData;
         SpawnCertainChessPiece(pieceData);
+
     }
 
     private void Update()
@@ -94,7 +90,7 @@ public class ChessBoard : Singleton<ChessBoard>
             //already hovering a tile before
             if (currentHover != hitPos)
             {
-                tiles[currentHover.x, currentHover.y, currentHover.z].layer =ContainsValidMoveHightLight(ref availableMoves,currentHover)? LayerMask.NameToLayer("Highlight") : LayerMask.NameToLayer("Tiles");
+                tiles[currentHover.x, currentHover.y, currentHover.z].layer = ContainsValidMoveHightLight(ref availableMoves, currentHover) ? LayerMask.NameToLayer("Highlight") : LayerMask.NameToLayer("Tiles");
                 currentHover = hitPos;
 
                 tiles[hitPos.x, hitPos.y, hitPos.z].layer = LayerMask.NameToLayer("Hover");
@@ -105,8 +101,8 @@ public class ChessBoard : Singleton<ChessBoard>
                 if (chessPieces[hitPos.x, hitPos.z, hitPos.y] != null)//
                 {
 
-                    if ((chessPieces[hitPos.x, hitPos.z, hitPos.y].team == 0 && isWhiteTurn ) )//|| (chessPieces[hitPos.x, hitPos.z, hitPos.y].team == 1 && !isWhiteTurn
-                    { 
+                    if ((chessPieces[hitPos.x, hitPos.z, hitPos.y].team == 0 && isWhiteTurn))//|| (chessPieces[hitPos.x, hitPos.z, hitPos.y].team == 1 && !isWhiteTurn
+                    {
 
                         currentSelected = chessPieces[hitPos.x, hitPos.z, hitPos.y];
 
@@ -162,9 +158,9 @@ public class ChessBoard : Singleton<ChessBoard>
                     currentSelected = null;
                     RemoveHighlightTile();
                     StartCoroutine(Delayforsecond(1));
-                    
-                    
-                    
+
+
+
                 }
 
             }
@@ -182,14 +178,14 @@ public class ChessBoard : Singleton<ChessBoard>
         }
 
 
-        if(step <= 0)
+        if (step <= 0)
         {
             IsWinningGame?.Invoke(this, new EndGameData
             {
                 winteam = 1,
                 moveleft = step,
                 MapID = map.MapID
-            }) ;
+            });
         }
     }
 
@@ -197,7 +193,7 @@ public class ChessBoard : Singleton<ChessBoard>
 
 
 
-    
+
 
 
 
@@ -211,7 +207,7 @@ public class ChessBoard : Singleton<ChessBoard>
         {
             chessPieces[data[i].x, data[i].y, data[i].z] = SpawnSinglePiece(data[i].type, data[i].team);
             PositionPiece(data[i].x, data[i].y, data[i].z);
-            
+
 
         }
 
@@ -230,7 +226,8 @@ public class ChessBoard : Singleton<ChessBoard>
         chessPieces[x, y, z].currentX = x;
         chessPieces[x, y, z].currentY = y;
         chessPieces[x, y, z].currentZ = z;
-        if (tiles[x, z, y].CompareTag("Slope")) {
+        if (tiles[x, z, y].CompareTag("Slope"))
+        {
             chessPieces[x, y, z].SetPosition(GetSlopeTileStandPos(x, y, z), true);
             if (tiles[x, z, y].GetComponent<Tag>().direction == DirectionalSlope.top)
             {
@@ -389,12 +386,14 @@ public class ChessBoard : Singleton<ChessBoard>
                 chessPieces[x, y, z] = null;
 
             }
-            if (ocp.type == ChessPieceType.King) { //win
+            if (ocp.type == ChessPieceType.King)
+            { //win
                 IsWinningGame?.Invoke(this, new EndGameData
                 {
                     winteam = 0,
-                    moveleft = step,MapID = map.MapID
-                }) ;
+                    moveleft = step,
+                    MapID = map.MapID
+                });
                 return true;
             }
         }
@@ -403,8 +402,8 @@ public class ChessBoard : Singleton<ChessBoard>
         PositionPiece(x, y, z);
         isWhiteTurn = false;
         step--;
-       
-        OnStepReduce?.Invoke(this,(step / map.stepLimit));
+
+        OnStepReduce?.Invoke(this, (step / map.stepLimit));
         return true;
     }
 
@@ -419,7 +418,8 @@ public class ChessBoard : Singleton<ChessBoard>
     public List<ChessPiece> GetCurrentChessPiece()
     {
         List<ChessPiece> currentcp = new List<ChessPiece>();
-        for (int i = 0; i < tileList.Length; i++) {
+        for (int i = 0; i < tileList.Length; i++)
+        {
             Vector3Int value = NameConvert(tileList[i].name);
             if (chessPieces[value.x, value.y, value.z] != null)
             {
@@ -436,7 +436,8 @@ public class ChessBoard : Singleton<ChessBoard>
     public List<ChessPiece> GetCurrentChessPieceTeam(int team)
     {
         List<ChessPiece> teamcp = new List<ChessPiece>();
-        for (int i = 0; i < tileList.Length; i++) {
+        for (int i = 0; i < tileList.Length; i++)
+        {
             Vector3Int value = NameConvert(tileList[i].name);
             if (chessPieces[value.x, value.y, value.z] != null && chessPieces[value.x, value.y, value.z].team == team)
             {
@@ -460,31 +461,31 @@ public class ChessBoard : Singleton<ChessBoard>
         {
             List<Vector3Int> moves = piece.GetAvailableMoves(ref chessPieces, TILE_COUNT_X, TILE_COUNT_Y, TILE_COUNT_Z);//modify
 
-            
+
             for (int j = 0; j < moves.Count; j++)
             {
 
-               
+
                 availableMove.Add(new Move(new Vector3Int(piece.currentX, piece.currentY, piece.currentZ), new Vector3Int(moves[j].x, moves[j].y, moves[j].z), chessPieces[moves[j].x, moves[j].y, moves[j].z]));
-                
+
             }
-            
-         }
-       
-       
-       
+
+        }
+
+
+
         return availableMove;
-    } 
+    }
     public int GetAvailableMoveCount(ChessPiece piece)
     {
         return piece.GetAvailableMoves(ref chessPieces, TILE_COUNT_X, TILE_COUNT_Z, TILE_COUNT_Y).Count;
     }
-    
-    
+
+
     public void MakeMove(Move move)
     {
         move.capturedPiece = chessPieces[move.destination.x, move.destination.y, move.destination.z];
-        chessPieces[move.destination.x,move.destination.y,move.destination.z ] = chessPieces[move.source.x,move.source.y,move.source.z ];
+        chessPieces[move.destination.x, move.destination.y, move.destination.z] = chessPieces[move.source.x, move.source.y, move.source.z];
         chessPieces[move.source.x, move.source.y, move.source.z] = null;
     }
     public void UndoMove(Move move)
@@ -492,12 +493,12 @@ public class ChessBoard : Singleton<ChessBoard>
         chessPieces[move.source.x, move.source.y, move.source.z] = chessPieces[move.destination.x, move.destination.y, move.destination.z];
         chessPieces[move.destination.x, move.destination.y, move.destination.z] = move.capturedPiece;
     }
-    public void BotMove(Vector3Int source , Vector3Int destination)
+    public void BotMove(Vector3Int source, Vector3Int destination)
     {
-        
-            ChessPiece ocp = chessPieces[destination.x, destination.y, destination.z];
-           if(ocp != null)
-           {
+
+        ChessPiece ocp = chessPieces[destination.x, destination.y, destination.z];
+        if (ocp != null)
+        {
             ocp.SetScale(Vector3.zero, true);
             chessPieces[destination.x, destination.y, destination.z] = null;
             if (ocp.team == 0 && ocp.type == ChessPieceType.King)
@@ -508,20 +509,20 @@ public class ChessBoard : Singleton<ChessBoard>
                     moveleft = step,
                     MapID = map.MapID
 
-                }) ;
+                });
             }
         }
-           
-                
 
-            
-        
-        chessPieces[destination.x, destination.y, destination.z] = chessPieces[source.x, source.y, source.z] ;
+
+
+
+
+        chessPieces[destination.x, destination.y, destination.z] = chessPieces[source.x, source.y, source.z];
         chessPieces[source.x, source.y, source.z] = null;
         PositionPiece(destination.x, destination.y, destination.z);
         isWhiteTurn = true;
-        
-      
+
+
     }
     public Vector3Int GetBoardSize()
     {
@@ -530,10 +531,10 @@ public class ChessBoard : Singleton<ChessBoard>
     IEnumerator Delayforsecond(float time)
     {
         yield return new WaitForSeconds(time);
-        Move botmove = minimax.GetBestMove(this,2);
-       
+        Move botmove = minimax.GetBestMove(this, 2);
+
         BotMove(botmove.source, botmove.destination);
-        
+
     }
 }
 public class EndGameData

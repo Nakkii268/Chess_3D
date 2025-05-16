@@ -18,7 +18,7 @@ public class PauseUI : UIElement
             SceneController.ReloadScene();
         });
         ResumeBtn.onClick.AddListener(() => {
-            Hide() ;
+            Hide();
         });
         InGameUIManager.Instance.OnPauseBtnCick += InGameUIManager_OnPauseBtnCick;
     }
@@ -28,5 +28,5 @@ public class PauseUI : UIElement
         Show();
     }
 
- 
+
 }
