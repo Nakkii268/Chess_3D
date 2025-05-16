@@ -25,7 +25,7 @@ public class MenuUIManager : Singleton<MenuUIManager>
         leaderboardUI.PreGetData();
         leaderboardUI.Hide();
         settingUI.Hide();
-        Debug.Log("manager");
+        
     }
 
     

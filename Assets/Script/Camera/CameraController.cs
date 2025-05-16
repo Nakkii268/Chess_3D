@@ -51,7 +51,7 @@ public class CameraController : MonoBehaviour
     {
         
         target = GameObject.Find("CameraPoint").transform;
-
+        Debug.Log("run");
     }
 
     // Update is called once per frame
