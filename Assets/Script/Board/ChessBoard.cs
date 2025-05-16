@@ -86,6 +86,7 @@ public class ChessBoard : Singleton<ChessBoard>
                 currentHover = hitPos;
 
                 tiles[hitPos.x, hitPos.y, hitPos.z].layer = LayerMask.NameToLayer("Hover");//
+                Debug.Log("oke");
             }
             //already hovering a tile before
             if (currentHover != hitPos)

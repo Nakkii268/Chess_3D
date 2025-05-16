@@ -10,7 +10,7 @@ public class MenuUI : UIElement
     [SerializeField] private Button quitBtn;
     [SerializeField] private Button leaderBoard;
     [SerializeField] private Button Shopbtn;
-    [SerializeField] private Button settingBtn;
+   // [SerializeField] private Button settingBtn;
 
     [SerializeField] private TextMeshProUGUI UserName;
     [SerializeField] private TextMeshProUGUI UserCoin;
@@ -36,10 +36,10 @@ public class MenuUI : UIElement
         {
             MenuUIManager.Instance.GetShopUI().Show();
         });
-        settingBtn.onClick.AddListener(() =>
+        /*settingBtn.onClick.AddListener(() =>
         {
             MenuUIManager.Instance.GetSettingUI().Show();
-        });
+        });*/
         UserName.text = PlayerPrefs.GetString("UserName");
 
         UserCoin.text = GameManager.Instance.GetPlayerData().Coin.ToString();
